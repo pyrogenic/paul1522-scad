@@ -1,11 +1,13 @@
 // Raspberry Pi Zero and Zero W
 
-include <lib_enclosure3.scad>
+include <lib_enclosure.scad>
 
 // Variables
 //$fn=30;
 function fillet_z() = 3.0;
 function wall_thickness() = 2.0;
+function top_thickness() = 2.0;
+function bottom_thickness() = 2.0;
 function tolerance() = 0.6; 
 function device_x() = 65.0;
 function device_y() = 30.0;
@@ -49,11 +51,11 @@ power = [
 
 enclosure();
 
-module right_cutouts() {
+module right_cutouts(is_bottom) {
 	square_cutout(csi[0], csi[1]); // camera
 }
 
-module left_cutouts() {
+module left_cutouts(is_bottom) {
 	//square_cutout(leds[0],   leds[1]); // pwr & act leds
 	square_cutout(sdcard[0], sdcard[1]); // micro sd card
 }
@@ -64,7 +66,7 @@ module front_cutouts(is_bottom) {
     square_cutout(power[0],  power[1]); // usb2
 }
 
-module back_cutouts() {
+module back_cutouts(is_bottom) {
 }
 
 module top_cutouts() {
@@ -74,7 +76,7 @@ module bottom_cutouts() {
 	//vent([device_x()/2, device_y()/2], [device_x()-15, device_y()-15], 3.5);
 }
 
-module cutouts() {
+module cutouts(is_bottom) {
 	rubber_band_grooves();
 	//rubber_feet(3.5);
 	//flat_head_screws(1.6+wall_thickness());
@@ -132,15 +134,15 @@ module nuts(radius) {
 	}
 }
 
-module engraving() {
-	*top_face() 
+module engraving(is_bottom) {
+	if (!is_bottom)	top_face()
 		translate([inner_x()/2, outer_y()/2, 0]) 
 			linear_extrude(1) 
 				rotate([0, 0, 0])
 					text(text="Pi Zero", halign="center", valign="center");
 }
 
-module attachments() {
+module attachments(is_bottom) {
 	// Put a thin (hopefully translucent) layer over the pwr & act leds.
 	*left_face() 
         translate([leds[0][0]-leds[1][0]/2-0.5, leds[0][1]-leds[1][1]/2-0.5, 0])

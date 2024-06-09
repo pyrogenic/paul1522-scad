@@ -60,7 +60,7 @@ module front_cutouts(is_bottom) {
 	}
 }
 
-module back_cutouts() {
+module back_cutouts(is_bottom) {
 	//square_cutout([device_x-gpio[0][0], (device_z+twall_thickness)/2], [gpio[1][0], device_z+twall_thickness]); // gpio
 }
 
